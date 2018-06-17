@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VC_RAINBOW", "VC_RAINBOW.vcproj", "{B38FAD08-AB6B-4A6B-AA82-D9C95B8B4662}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2EDE2FFA-7230-4947-9A32-C1A7A86C10D3} = {2EDE2FFA-7230-4947-9A32-C1A7A86C10D3}
+		{F2659364-96D8-4EA2-BF3B-D14CC2DCFF2C} = {F2659364-96D8-4EA2-BF3B-D14CC2DCFF2C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GETC", "GETC\GETC.vcproj", "{F2659364-96D8-4EA2-BF3B-D14CC2DCFF2C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RAINBOW", "RAINBOW\RAINBOW.vcproj", "{2EDE2FFA-7230-4947-9A32-C1A7A86C10D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B38FAD08-AB6B-4A6B-AA82-D9C95B8B4662}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B38FAD08-AB6B-4A6B-AA82-D9C95B8B4662}.Debug|Win32.Build.0 = Debug|Win32
+		{B38FAD08-AB6B-4A6B-AA82-D9C95B8B4662}.Release|Win32.ActiveCfg = Release|Win32
+		{B38FAD08-AB6B-4A6B-AA82-D9C95B8B4662}.Release|Win32.Build.0 = Release|Win32
+		{F2659364-96D8-4EA2-BF3B-D14CC2DCFF2C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F2659364-96D8-4EA2-BF3B-D14CC2DCFF2C}.Debug|Win32.Build.0 = Debug|Win32
+		{F2659364-96D8-4EA2-BF3B-D14CC2DCFF2C}.Release|Win32.ActiveCfg = Release|Win32
+		{F2659364-96D8-4EA2-BF3B-D14CC2DCFF2C}.Release|Win32.Build.0 = Release|Win32
+		{2EDE2FFA-7230-4947-9A32-C1A7A86C10D3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2EDE2FFA-7230-4947-9A32-C1A7A86C10D3}.Debug|Win32.Build.0 = Debug|Win32
+		{2EDE2FFA-7230-4947-9A32-C1A7A86C10D3}.Release|Win32.ActiveCfg = Release|Win32
+		{2EDE2FFA-7230-4947-9A32-C1A7A86C10D3}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
