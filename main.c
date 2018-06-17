@@ -18,8 +18,8 @@
 
 	  GETC            GETC   RAINBOW  
 	   |                |       |
-	   |                +--+----+
-	  RAINBOW              |
+	  RAINBOW           +--+----+
+	                       |
 						VC_RAINBOW
 
 

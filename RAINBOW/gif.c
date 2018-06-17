@@ -42,9 +42,8 @@
 #include "gif.h"
 
 
-/********************  Callback from lzw ************************************************************************/
 
-static int NextByte(struct GIFINFO *g)
+static int NextByte(struct GIFINFO *g) // Callback from lzw
 {
 	if (0==g->BlkCnt) 
 	{
@@ -56,10 +55,7 @@ static int NextByte(struct GIFINFO *g)
 	return GETC();
 }
 
-
-/**************************************** Convert to BM ***********************************************************/
-
-static unsigned char *ImagePass(struct GIFINFO *g, unsigned char *src, int Line, int LineInc)
+static unsigned char *ImagePass(struct GIFINFO *g, unsigned char *src, int Line, int LineInc) // Conversion 
 {
 		int BmpLineInc, x;
 		unsigned char *BmpPixel, *BmpLine;
@@ -87,7 +83,7 @@ static unsigned char *ImagePass(struct GIFINFO *g, unsigned char *src, int Line,
 
 extern void GIFConvertImage(struct GIFINFO *g)
 {
-	if (g->ImagePacked & 64)	// 4-pass interlaced gif image
+	if (g->ImagePacked & 64) // 4-pass interlaced gif image
 	{
 		unsigned char *src;
 		src= ImagePass(g, g->ImageData, 0, 8);
@@ -150,25 +146,25 @@ static void SetTrueColorTable(struct GIFINFO *g, int *TrueColorTable, int Packed
 	}
 }
 
-extern enum ENUMGIF GIFNextImage(struct GIFINFO *g)		// finds next frame in gif stream.. decompresses it and returns g. End-of-gif returns NULL. 
+extern enum ENUMGIF GIFNextImage(struct GIFINFO *g)	 // Finds next frame in GIF stream
 {
 	int ID;
 
 	g->has_GraphicsControlExtension=0;
 	g->has_ApplicationExtension= 0;
 
-	g->GraphicColorIndex= 256;	// set transparency to none: default
-	g->GraphicPacked= 0; // in case the block is missing, set Disposal to none
+	g->GraphicColorIndex= 256; // set transparency to none: default
+	g->GraphicPacked= 0;       // in case the block is missing, set Disposal to none
 
-	while ( (ID=GETC()) != 0x2C ) {						// until Image Descriptor.... or END OF GIF (!)
+	while ( (ID=GETC()) != 0x2C ) {  // until Image Descriptor.... or END OF GIF (!)
 			switch (ID) {
-				case 0x21:		// Extension Introducer?
-					switch (GETC()) {	// Label
-						case 0xF9:		//GIFGRAPHICCONTROL						// Important! Transparency, Disposal, Delaytime is here! 
-							GETC();	// SubBlockLength (always 04h)
+				case 0x21:              // Extension Introducer?
+					switch (GETC()) {
+						case 0xF9:      //GIFGRAPHICCONTROL
+							GETC();     // SubBlockLength (always 04h)
 							g->GraphicPacked= GETC();
 							g->GraphicDelayTime= GETWli();
-							if (0 == (g->GraphicPacked & 1)) GETC();	// skip
+							if (0 == (g->GraphicPacked & 1)) GETC(); // skip
 							else g->GraphicColorIndex= GETC();
 							GETC();		// Block Terminator (should be 0)
 							g->has_GraphicsControlExtension = 1;
@@ -185,7 +181,7 @@ extern enum ENUMGIF GIFNextImage(struct GIFINFO *g)		// finds next frame in gif 
 							SkipBlocks();
 							break;
 
-						case 0xFE:		// COMMENT. This block is OPTIONAL; any number of them may appear in the Data Stream. // The Comment Extension may be ignored by the decoder
+						case 0xFE:		// COMMENT. This block is OPTIONAL; any number of them may appear in the Data Stream
 							write_comment();
 							break;
 
@@ -268,7 +264,7 @@ extern enum ENUMGIF GIFSetup(struct GIFINFO *g, enum BITPERPIXELENUM bppenum, un
 	g->DSTaddr= dst;
 	g->DSTpitch= dstPitch;
 
-	lzw_init_gif(g->lzw, (void*)NextByte, g); // for GCC warning
+	lzw_init_gif(g->lzw, (void*)NextByte, g); // cast for GCC warning
 	g->Frame=0;
 
 	// PREPARE CANVAS? If Global Color Table is present.. and first image is smaller than screen AND/OR transparent: fill CANVAS with global Bg-Color?
