@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <malloc.h>
 
-
 #include "bmp.h"
 #include "jpeg81.h"
 #include "idct.h"
@@ -43,137 +42,6 @@
 extern void WriteBmp(struct BMP *bmp, char *path);
 
 static struct JPEGD J;		// a decoder object 
-
-
-cmpdref(int Ci, char *fref)
-{
-		static FILE *FDREF;
-
-		struct JPEGD *j= &J;
-
-		int dd=0;
-		
-		//int Ci= 2;
-		FDREF = fopen( fref, "rb" );
-
-		{
-			struct COMP *C= j->Components + Ci;
-			//int n, N= C->duS;
-			int X,Y,x,y;
-
-			for (Y=0; Y < C->du_h; Y++) 
-			{
-				for (X=0; X < C->du_w; X++) 
-				{
-					//printf("DU [%d][%d]\n", X, Y);
-					for (y=0; y < 8; y++) {
-
-						for (x=0; x < 8; x++) 
-						{
-							short refcoef= (fgetc(FDREF)<<8) + fgetc(FDREF);	// DCT
-							short coef= C->du[Y*C->du_width+X][y*8+x];	// DCT
-							
-							//unsigned short refcoef= (fgetc(FDREF)<<8) + fgetc(FDREF);	// LL single
-							//unsigned short refcoef= fgetc(FDREF) + (fgetc(FDREF)<<8) ;	// LL interleaved
-							//unsigned short coef= C->s[Y*C->duxI+X];	
-							
-							short diff= refcoef - coef;
-							
-							//printf("%3d ", refcoef);
-								//if (x==0 && y==0) 
-								//	printf("%d/%d \n", refcoef, coef);
-								
-							dd+=diff*diff;
-														
-							//if (diff>1 || diff<-1) {
-							if (diff) {
-
-								//if (x==0 && y==0) 
-									printf("%d/%d ", refcoef, coef);
-								
-								//printf("%3d ", diff);
-							}
-							//else printf(" .  ");
-							
-						}
-						//printf("\n");
-					}
-				}
-			}
-			
-			
-		}
-
-		printf("dd: %d\n", dd);
-
-		fclose(FDREF);
-
-}
-
-cmpdref_LL(int Ci, char *fref, int shi, int slo)
-{
-		static FILE *FDREF;
-
-		struct JPEGD *j= &J;
-
-		int dd=0;
-		
-		//int Ci= 2;
-		FDREF = fopen( fref, "rb" );
-
-		{
-			struct COMP *C= j->Components + Ci;
-			//int n, N= C->duS;
-			int X,Y,x,y;
-
-			for (Y=0; Y < C->du_h; Y++) 
-			{
-				for (X=0; X < C->du_w; X++) 
-				{
-					//printf("DU [%d][%d]\n", X, Y);
-					for (y=0; y < 1; y++) {
-
-						for (x=0; x < 1; x++) 
-						{
-							//short refcoef= (fgetc(FDREF)<<8) + fgetc(FDREF);	// DCT
-							//short coef= C->du[Y*C->duxI+X][y*8+x];	// DCT
-							
-							//unsigned short refcoef= (fgetc(FDREF)<<8) + fgetc(FDREF);	// LL single
-							unsigned short refcoef= (fgetc(FDREF)<<slo) + (fgetc(FDREF)<<shi) ;	// LL interleaved
-							unsigned short coef= C->samp[Y*C->du_width+X];	
-							
-							short diff= refcoef - coef;
-							
-							//printf("%3d ", refcoef);
-								//if (x==0 && y==0) 
-								//	printf("%d/%d \n", refcoef, coef);
-								
-							dd+=diff*diff;
-														
-							//if (diff>1 || diff<-1) {
-							if (diff) {
-
-								//if (x==0 && y==0) 
-									printf("%d/%d ", refcoef, coef);
-								
-								//printf("%3d ", diff);
-							}
-							//else printf(" .  ");
-							
-						}
-						//printf("\n");
-					}
-				}
-			}
-			
-			
-		}
-
-		printf("dd: %d\n", dd);
-
-		fclose(FDREF);
-
-}
 
 
 extern void jpeg2bmp(char *path)
@@ -184,40 +52,8 @@ extern void jpeg2bmp(char *path)
 	
 	err= JPEGDecode(j);
 
-	if ( err > 0 ) {
-
-		if (J.Nf==4) // ITU test 
-		if ((J.SOF&3)==3) {	// Lossless
-
-			int shi, slo;
-			if (J.P==8) shi=8, slo=0;
-			else shi=0, slo=8;
-
-				cmpdref_LL(0, "ITU83\\A16.SRC", shi, slo);
-				cmpdref_LL(1, "ITU83\\B16.SRC", shi, slo);
-				cmpdref_LL(2, "ITU83\\C16.SRC", shi, slo);
-				cmpdref_LL(3, "ITU83\\D16.SRC", shi, slo);
-
-		}
-		else {	// DCT-based Huffman/Arithmetic 8/12-bit
-
-			if (J.P==12) {
-
-				cmpdref(0, "ITU83\\EREF_A12.DCT");
-				cmpdref(1, "ITU83\\EREF_B12.DCT");
-				cmpdref(2, "ITU83\\EREF_C12.DCT");
-				cmpdref(3, "ITU83\\EREF_D12.DCT");
-			}
-			else {
-
-				cmpdref(0, "ITU83\\EREF_A8.DCT");
-				cmpdref(1, "ITU83\\EREF_B8.DCT");
-				cmpdref(2, "ITU83\\EREF_C8.DCT");
-				cmpdref(3, "ITU83\\EREF_D8.DCT");
-			}
-		}
-
-
+	if ( err > 0 ) 
+	{
 		if ( 3 == j->Nf ) 
 		{
 			printf("Scaled de-quantization and IDCT.. ");
@@ -321,7 +157,3 @@ extern void jpeg2bmp(char *path)
 
 	if (j->jpeg_mem) free(j->jpeg_mem);
 }
-
-
-
-
