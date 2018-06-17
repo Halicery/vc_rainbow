@@ -20,7 +20,7 @@
 	   |                |       |
 	  RAINBOW           +--+----+
 	                       |
-						VC_RAINBOW
+	                    VC_RAINBOW
 
 
 *   Copyright (c) 2017 A. Tarpai 
