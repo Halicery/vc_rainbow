@@ -243,7 +243,7 @@ extern enum ENUMGIF GIFNextImage(struct GIFINFO *g)	 // Finds next frame in GIF 
 }
 
 
-// An extra entry point: to setup parameters once becuase of subsequent calls to next/convert
+// An extra entry point: to setup parameters once because of subsequent calls to next/convert
 
 extern enum ENUMGIF GIFSetup(struct GIFINFO *g, enum BITPERPIXELENUM bppenum, unsigned char *dst, int dstPitch)
 {
